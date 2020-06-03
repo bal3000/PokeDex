@@ -1,14 +1,18 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { LOAD_POKEMON_LIST_SUCCESS, GET_POKEMON_LIST } from './types';
+import { GET_POKEMON_LIST } from './types';
 import { PokemonList } from '../../models/pokemon-list.interface';
 
 const pokeListUrl = 'https://pokeapi.co/api/v2/pokemon';
 
-const loadPokemonListSuccess = createAction<PokemonList>(
-  LOAD_POKEMON_LIST_SUCCESS
+export const loadPokemonListPending = createAction<PokemonList>(
+  `${GET_POKEMON_LIST}/pending`
 );
 
-const getPokemonList = createAsyncThunk<
+export const loadPokemonListSuccess = createAction<PokemonList>(
+  `${GET_POKEMON_LIST}/fulfilled`
+);
+
+export const loadPokemonList = createAsyncThunk<
   PokemonList,
   { offset: number; limit: number }
 >(GET_POKEMON_LIST, async ({ offset, limit }, thunkApi) => {
@@ -16,6 +20,6 @@ const getPokemonList = createAsyncThunk<
     `${pokeListUrl}?offset=${offset}&limit=${limit}`
   );
   const pokemon = (await response.json()) as PokemonList;
-  // thunkApi.dispatch(loadPokemonListSuccess(pokemon));
+  //thunkApi.dispatch(loadPokemonListSuccess(pokemon));
   return pokemon;
 });
