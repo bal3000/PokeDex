@@ -22,7 +22,9 @@ function Pokedex({
 }: PokedexProps): JSX.Element {
   useEffect(() => {
     try {
-      loadPokemonList({ offset: 0, limit: 50 });
+      if (!pokemonList || pokemonList?.length === 0) {
+        loadPokemonList({ offset: 0, limit: 50 });
+      }
     } catch (error) {
       console.log(error);
     }
