@@ -7,6 +7,7 @@ import { AppState } from '../../../store';
 import { loadPokemon } from '../../../store/pokemon/actions';
 import { Pokemon } from '../../../models/pokemon.interface';
 import { LinkingResource } from '../../../models/linking-resource.interface';
+import Spinner from '../../common/spinner/Spinner';
 
 interface PokemonSummaryStateProps {
   id: string;
@@ -36,9 +37,19 @@ function PokemonSummary({
   }, [id]);
 
   return (
-    <div>
-      <h2>{pokemonDetails?.name}</h2>
-    </div>
+    <React.Fragment>
+      {!!pokemonDetails ? (
+        <div>
+          <h2>{pokemonDetails.name}</h2>
+          <img
+            src={pokemonDetails.sprites.front_default}
+            alt={pokemonDetails.name}
+          />
+        </div>
+      ) : (
+        <Spinner />
+      )}
+    </React.Fragment>
   );
 }
 
