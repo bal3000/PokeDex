@@ -58,11 +58,11 @@ function Pokedex({
           </div>
         )}
       </div>
-      <div className="col-4">
+      <div className="col-4 container">
         {loading ? (
           <Spinner />
         ) : (
-          <div className="list-group">
+          <div className="poke-list list-group">
             {pokemonList?.map((pokemon) => (
               <a
                 onClick={(e) => handleClick(e, pokemon)}

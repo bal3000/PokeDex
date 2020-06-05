@@ -1,0 +1,14 @@
+.row {
+  .container {
+    overflow: hidden;
+    top: 40px;
+    bottom: 20px;
+    position: absolute;
+    right: 0;
+    .poke-list {
+      overflow: scroll;
+      overflow-x: hidden;
+      height: 100%;
+    }
+  }
+}

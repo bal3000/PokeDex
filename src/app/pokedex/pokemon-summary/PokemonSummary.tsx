@@ -36,6 +36,9 @@ function PokemonSummary({
   const getTypeIcon = (type: string): string => {
     return `${process.env.PUBLIC_URL}/images/icon_${type.toLowerCase()}.png`;
   };
+  const getSpriteOrGif = (): string => {
+    return `${process.env.PUBLIC_URL}/images/${id}.gif`;
+  };
 
   return (
     <React.Fragment>
@@ -43,8 +46,12 @@ function PokemonSummary({
         <div className="pokedetails row align-items-center justify-content-md-center">
           <div className="col-4">
             <img
-              className="img-fluid"
-              src={pokemonDetails.sprites.front_default}
+              className="img-fluid w-50"
+              src={
+                id === '6' || id === '25' || id === '26'
+                  ? getSpriteOrGif()
+                  : pokemonDetails.sprites.front_default
+              }
               alt={pokemonDetails.name}
             />
           </div>
@@ -74,6 +81,15 @@ function PokemonSummary({
                 <div className="row">
                   <div className="col label">Weight</div>
                   <div className="col">{pokemonDetails.weight}</div>
+                </div>
+                <div className="row">
+                  <p>
+                    {
+                      pokemonDetails.species.details?.flavor_text_entries.find(
+                        (txt: any) => txt.language.name === 'en'
+                      )?.flavor_text
+                    }
+                  </p>
                 </div>
               </div>
             </div>
