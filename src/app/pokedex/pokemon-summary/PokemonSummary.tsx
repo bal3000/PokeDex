@@ -22,9 +22,6 @@ interface PokemonSummaryProps {
 
 type SummaryProps = PokemonSummaryStateProps & PokemonSummaryProps;
 
-// ON CLICK SHOW THIS COMPONENT AND EITHER A) PASS IN POKEMON OR B) CALL THE THUNK HERE AND POPULATE THE STATE
-// EITHER WAY I NEED TO HAVE A DICTONARY IN THE STATE WITH THE POKEMON NAME AS THE KEY
-
 function PokemonSummary({
   id,
   pokemonDetails,
@@ -36,15 +33,51 @@ function PokemonSummary({
     }
   }, [id]);
 
+  const getTypeIcon = (type: string): string => {
+    return `${process.env.PUBLIC_URL}/images/icon_${type.toLowerCase()}.png`;
+  };
+
   return (
     <React.Fragment>
       {!!pokemonDetails ? (
-        <div>
-          <h2>{pokemonDetails.name}</h2>
-          <img
-            src={pokemonDetails.sprites.front_default}
-            alt={pokemonDetails.name}
-          />
+        <div className="pokedetails row align-items-center justify-content-md-center">
+          <div className="col-4">
+            <img
+              className="img-fluid"
+              src={pokemonDetails.sprites.front_default}
+              alt={pokemonDetails.name}
+            />
+          </div>
+          <div className="col-4">
+            <div className="card">
+              <h5 className="card-header">
+                No.{pokemonDetails.id} {pokemonDetails.name}
+              </h5>
+              <div className="card-body">
+                <div className="row">
+                  <div className="col label">Type</div>
+                  <div className="col">
+                    {pokemonDetails.types.map((type) => (
+                      <img
+                        key={type.type.name}
+                        className="type-icon img-fluid w-25"
+                        src={getTypeIcon(type.type.name)}
+                        alt={type.type.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col label">Height</div>
+                  <div className="col">{pokemonDetails.height}</div>
+                </div>
+                <div className="row">
+                  <div className="col label">Weight</div>
+                  <div className="col">{pokemonDetails.weight}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <Spinner />

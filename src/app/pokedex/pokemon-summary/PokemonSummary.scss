@@ -1,0 +1,21 @@
+.pokedetails {
+  .col-4 {
+    .card {
+      .card-body {
+        .row {
+          border-bottom: 1px solid #666666;
+          .col {
+            padding: 10px;
+            &.label {
+              background-color: #cccccc;
+              border-right: 1px solid #666666;
+            }
+            img.type-icon {
+              padding: 0 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
