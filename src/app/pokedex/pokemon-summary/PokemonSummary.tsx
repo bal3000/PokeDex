@@ -35,7 +35,11 @@ function PokemonSummary({
     }
   }, [id]);
 
-  return <div></div>;
+  return (
+    <div>
+      <h2>{pokemonDetails?.name}</h2>
+    </div>
+  );
 }
 
 // temp until phase 2
