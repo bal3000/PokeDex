@@ -6,29 +6,27 @@ import './PokemonSummary.scss';
 import { AppState } from '../../../store';
 import { loadPokemon } from '../../../store/pokemon/actions';
 import { Pokemon } from '../../../models/pokemon.interface';
-import { LinkingResource } from '../../../models/linking-resource.interface';
 import Spinner from '../../common/spinner/Spinner';
 
 interface PokemonSummaryStateProps {
-  id: string;
-  pokemonDetails: Pokemon;
+  pokemon?: Pokemon;
   loading: boolean;
   loadPokemon: any;
 }
 
 interface PokemonSummaryProps {
-  pokemon: LinkingResource;
+  id: number;
 }
 
 type SummaryProps = PokemonSummaryStateProps & PokemonSummaryProps;
 
 function PokemonSummary({
   id,
-  pokemonDetails,
+  pokemon,
   loadPokemon,
 }: SummaryProps): JSX.Element {
   useEffect(() => {
-    if (!pokemonDetails) {
+    if (!pokemon) {
       loadPokemon(id);
     }
   }, [id]);
@@ -42,54 +40,48 @@ function PokemonSummary({
 
   return (
     <React.Fragment>
-      {!!pokemonDetails ? (
+      {!!pokemon ? (
         <div className="pokedetails row align-items-center justify-content-md-center">
           <div className="col-4">
             <img
               className="img-fluid w-50"
               src={
-                id === '6' || id === '25' || id === '26'
+                id === 6 || id === 25 || id === 26
                   ? getSpriteOrGif()
-                  : pokemonDetails.sprites.front_default
+                  : pokemon.sprites.frontDefault
               }
-              alt={pokemonDetails.name}
+              alt={pokemon.name}
             />
           </div>
           <div className="col-4">
             <div className="card">
               <h5 className="card-header">
-                No.{pokemonDetails.id} {pokemonDetails.name}
+                No.{pokemon.id} {pokemon.name}
               </h5>
               <div className="card-body">
                 <div className="row">
                   <div className="col label">Type</div>
                   <div className="col">
-                    {pokemonDetails.types.map((type) => (
+                    {pokemon.types.map((type) => (
                       <img
-                        key={type.type.name}
+                        key={type.name}
                         className="type-icon img-fluid w-25"
-                        src={getTypeIcon(type.type.name)}
-                        alt={type.type.name}
+                        src={getTypeIcon(type.name)}
+                        alt={type.name}
                       />
                     ))}
                   </div>
                 </div>
                 <div className="row">
                   <div className="col label">Height</div>
-                  <div className="col">{pokemonDetails.height}</div>
+                  <div className="col">{pokemon.height}</div>
                 </div>
                 <div className="row">
                   <div className="col label">Weight</div>
-                  <div className="col">{pokemonDetails.weight}</div>
+                  <div className="col">{pokemon.weight}</div>
                 </div>
                 <div className="row">
-                  <p>
-                    {
-                      pokemonDetails.species.details?.flavor_text_entries.find(
-                        (txt: any) => txt.language.name === 'en'
-                      )?.flavor_text
-                    }
-                  </p>
+                  <p>{pokemon.species?.flavorText}</p>
                 </div>
               </div>
             </div>
@@ -102,15 +94,11 @@ function PokemonSummary({
   );
 }
 
-// temp until phase 2
 const mapStateToProps = (state: AppState, ownProps: PokemonSummaryProps) => {
-  const split = ownProps.pokemon.url.split('/');
-  const id = split[split.length - 2];
   return {
-    id,
-    pokemonDetails: state.pokemonDetails[id],
+    id: ownProps.id,
+    pokemon: state.selectedPokemon,
     loading: state.loading,
-    pokemon: ownProps.pokemon,
   };
 };
 

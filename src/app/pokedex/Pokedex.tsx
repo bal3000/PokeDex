@@ -5,90 +5,93 @@ import { connect } from 'react-redux';
 import './Pokedex.scss';
 
 import { AppState } from '../../store';
-import { loadPokemonList } from '../../store/pokemon/actions';
-import { LinkingResource } from '../../models/linking-resource.interface';
+import { searchPokemon } from '../../store/pokemon/actions';
+import { Pokemon } from '../../models/pokemon.interface';
 import Spinner from '../common/spinner/Spinner';
 import PokemonSummary from './pokemon-summary/PokemonSummary';
 
 interface PokedexProps {
-  pokemonList?: LinkingResource[];
+  results: Pokemon[];
   loading: boolean;
-  loadPokemonList: any;
+  searchPokemon: any;
 }
 
 function Pokedex({
-  pokemonList,
+  results,
   loading,
-  loadPokemonList,
+  searchPokemon,
 }: PokedexProps): JSX.Element {
   const listItemClass = 'list-group-item list-group-item-action';
-  const [selectedPokemon, setSelectedPokemon] = useState({ name: '', url: '' });
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
-    try {
-      if (!pokemonList || pokemonList?.length === 0) {
-        loadPokemonList({ offset: 0, limit: 50 });
-      }
-    } catch (error) {
-      console.log(error);
+    if (searchText && searchText.length >= 3) {
+      searchPokemon(searchText);
     }
-  }, []);
-
-  const getNumber = (pokemon: LinkingResource): string => {
-    const split = pokemon.url.split('/');
-    return split[split.length - 2];
-  };
+  }, [searchText]);
 
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    poke: LinkingResource
+    poke: Pokemon
   ) => {
     event.preventDefault();
-    setSelectedPokemon(poke);
+  };
+
+  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = target;
+    setSearchText(value);
   };
 
   return (
-    <div className="row">
-      <div className="col-8">
-        {selectedPokemon.url.length ? (
-          <PokemonSummary pokemon={selectedPokemon} />
-        ) : (
-          <div className="row justify-content-md-center">
-            <p>Please select a pokemon</p>
+    <React.Fragment>
+      <div className="row justify-content-md-center">
+        <div className="col">
+          <div className="row align-items-start">
+            <div className="col">
+              <input
+                type="text"
+                name="search-bar"
+                className="form-control"
+                placeholder="Search by pokemon name or type"
+                value={searchText}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-        )}
-      </div>
-      <div className="col-4 container">
-        {loading ? (
-          <Spinner />
-        ) : (
-          <div className="poke-list list-group">
-            {pokemonList?.map((pokemon) => (
-              <a
-                onClick={(e) => handleClick(e, pokemon)}
-                href="#"
-                key={pokemon.name}
-                className={
-                  selectedPokemon.name === pokemon.name
-                    ? `${listItemClass} active`
-                    : listItemClass
-                }
-              >
-                No. {getNumber(pokemon)} {pokemon.name}
-              </a>
-            ))}
+          <div className="row align-items-end">
+            {loading ? (
+              <Spinner />
+            ) : (
+              results.map((pokemon) => (
+                <div className="col-4">
+                  <a
+                    onClick={(e) => handleClick(e, pokemon)}
+                    href="#"
+                    key={pokemon.name}
+                    className={listItemClass}
+                  >
+                    <img
+                      className="img-fluid"
+                      src={pokemon.sprites.frontDefault}
+                      alt={pokemon.name}
+                    />
+                    No. {pokemon.id} {pokemon.name}
+                  </a>
+                </div>
+              ))
+            )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 
 const mapStateToProps = (state: AppState) => {
   return {
-    pokemonList: state.pokemon?.results,
+    results: state.pokemon,
     loading: state.loading,
   };
 };
 
-export default connect(mapStateToProps, { loadPokemonList })(Pokedex);
+export default connect(mapStateToProps, { searchPokemon })(Pokedex);

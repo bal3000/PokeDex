@@ -1,10 +1,12 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { Canceler } from 'axios';
 
 import { GET_POKEMON, SEARCH_POKEMON } from './types';
 import { Pokemon } from '../../models/pokemon.interface';
 
 const pokemonUrl = 'http://localhost:3000/pokemon';
+
+let cancel: Canceler;
 
 export const searchPokemonPending = createAction<Pokemon[]>(
   `${SEARCH_POKEMON}/pending`
@@ -25,8 +27,14 @@ export const loadPokemonSuccess = createAction<Pokemon>(
 export const searchPokemon = createAsyncThunk<Pokemon[], string>(
   SEARCH_POKEMON,
   async (searchText) => {
+    if (cancel) {
+      cancel();
+    }
     const response = await axios.get<Pokemon[]>(
-      `${pokemonUrl}?searchText=${searchText}`
+      `${pokemonUrl}?searchText=${searchText}`,
+      {
+        cancelToken: new axios.CancelToken((c: Canceler) => (cancel = c)),
+      }
     );
     return response.data;
   }
