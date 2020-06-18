@@ -8,6 +8,7 @@ import { AppState } from '../../../store';
 import { searchPokemon } from '../../../store/pokemon/actions';
 import { Pokemon } from '../../../models/pokemon.interface';
 import Spinner from '../../common/spinner/Spinner';
+import SearchBox from '../../common/search/SearchBox';
 
 interface PokemonSearchProps {
   results: Pokemon[];
@@ -40,14 +41,10 @@ function PokemonSearch({
         <div className="col">
           <div className="row align-items-start">
             <div className="col">
-              <input
-                type="text"
-                name="search-bar"
-                className="form-control"
-                placeholder="Search by pokemon name or type"
-                value={searchText}
-                onChange={handleChange}
-              />
+              <SearchBox
+                text={searchText}
+                searchChanged={handleChange}
+              ></SearchBox>
             </div>
           </div>
           <div className="row align-items-end">
