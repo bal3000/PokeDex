@@ -1,19 +1,17 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { GET_POKEMON_LIST, GET_POKEMON } from './types';
-import { PokemonList } from '../../models/pokemon-list.interface';
+import { GET_POKEMON, SEARCH_POKEMON } from './types';
 import { Pokemon } from '../../models/pokemon.interface';
-import { PokemonSpecies } from '../../models/pokemon-species.interface';
 
-const pokemonUrl = 'https://pokeapi.co/api/v2';
+const pokemonUrl = 'http://localhost:3000/pokemon';
 
-export const loadPokemonListPending = createAction<PokemonList>(
-  `${GET_POKEMON_LIST}/pending`
+export const searchPokemonPending = createAction<Pokemon[]>(
+  `${SEARCH_POKEMON}/pending`
 );
 
-export const loadPokemonListSuccess = createAction<PokemonList>(
-  `${GET_POKEMON_LIST}/fulfilled`
+export const searchPokemonSuccess = createAction<Pokemon[]>(
+  `${SEARCH_POKEMON}/fulfilled`
 );
 
 export const loadPokemonPending = createAction<Pokemon>(
@@ -24,26 +22,20 @@ export const loadPokemonSuccess = createAction<Pokemon>(
   `${GET_POKEMON}/fulfilled`
 );
 
-export const loadPokemonList = createAsyncThunk<
-  PokemonList,
-  { offset: number; limit: number }
->(GET_POKEMON_LIST, async ({ offset, limit }) => {
-  const response = await axios.get<PokemonList>(
-    `${pokemonUrl}/pokemon?offset=${offset}&limit=${limit}`
-  );
-  return response.data;
-});
+export const searchPokemon = createAsyncThunk<Pokemon[], string>(
+  SEARCH_POKEMON,
+  async (searchText) => {
+    const response = await axios.get<Pokemon[]>(
+      `${pokemonUrl}?searchText=${searchText}`
+    );
+    return response.data;
+  }
+);
 
 export const loadPokemon = createAsyncThunk<Pokemon, string>(
   GET_POKEMON,
   async (pokeNumber) => {
-    const pokemonResponse = await axios.get<Pokemon>(
-      `${pokemonUrl}/pokemon/${pokeNumber}`
-    );
-    const speciesResponse = await axios.get<PokemonSpecies>(
-      `${pokemonUrl}/pokemon-species/${pokeNumber}`
-    );
-    pokemonResponse.data.species.details = speciesResponse.data;
-    return pokemonResponse.data;
+    const response = await axios.get<Pokemon>(`${pokemonUrl}/${pokeNumber}`);
+    return response.data;
   }
 );

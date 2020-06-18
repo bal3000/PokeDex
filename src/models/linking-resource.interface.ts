@@ -1,5 +1,4 @@
 export interface LinkingResource {
+  id: number;
   name: string;
-  url: string;
-  details?: any;
 }
