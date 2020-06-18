@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './Pokedex.scss';
@@ -30,13 +31,6 @@ function Pokedex({
     }
   }, [searchText]);
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    poke: Pokemon
-  ) => {
-    event.preventDefault();
-  };
-
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = target;
     setSearchText(value);
@@ -63,20 +57,15 @@ function Pokedex({
               <Spinner />
             ) : (
               results.map((pokemon) => (
-                <div className="col-4">
-                  <a
-                    onClick={(e) => handleClick(e, pokemon)}
-                    href="#"
-                    key={pokemon.name}
-                    className={listItemClass}
-                  >
+                <div key={pokemon.id} className="col-4">
+                  <Link className={listItemClass} to={`/pokedex/${pokemon.id}`}>
                     <img
                       className="img-fluid"
                       src={pokemon.sprites.frontDefault}
                       alt={pokemon.name}
                     />
                     No. {pokemon.id} {pokemon.name}
-                  </a>
+                  </Link>
                 </div>
               ))
             )}
