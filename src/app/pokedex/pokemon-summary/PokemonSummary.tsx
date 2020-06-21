@@ -23,6 +23,7 @@ type SummaryProps = PokemonSummaryStateProps & PokemonSummaryProps;
 function PokemonSummary({
   id,
   pokemon,
+  loading,
   loadPokemon,
 }: SummaryProps): JSX.Element {
   useEffect(() => {
@@ -40,7 +41,9 @@ function PokemonSummary({
 
   return (
     <React.Fragment>
-      {!!pokemon ? (
+      {!pokemon || loading ? (
+        <Spinner />
+      ) : (
         <div className="pokedetails row align-items-center justify-content-md-center">
           <div className="col-4">
             <img
@@ -87,8 +90,6 @@ function PokemonSummary({
             </div>
           </div>
         </div>
-      ) : (
-        <Spinner />
       )}
     </React.Fragment>
   );
