@@ -42,6 +42,10 @@ function PokemonDetails({
     setSearchText(value);
   };
 
+  const getTypeIcon = (type: string): string => {
+    return `${process.env.PUBLIC_URL}/images/icon_${type.toLowerCase()}.png`;
+  };
+
   return !pokemon || loading ? (
     <Spinner />
   ) : (
@@ -90,18 +94,53 @@ function PokemonDetails({
           </nav>
 
           <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <div className="d-flex row justify-content-md-center flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div className="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <div className="col">
-                <div className="row">
+                <div className="row justify-content-md-center ">
                   <img
-                    className="img-fluid w-50"
+                    className="img-fluid"
                     src={pokemon.sprites.frontDefault}
                     alt={pokemon.name}
                   />
                 </div>
-                <div className="row">
-                  <h1 className="h2 text-capitalize">{pokemon.name}</h1>
-                  <p className="lead">{pokemon.species.flavorText}</p>
+                <div className="row justify-content-md-center">
+                  <div className="col">
+                    <h1 className="row justify-content-md-center h2 text-capitalize">
+                      No.{pokemon.id} {pokemon.name}
+                    </h1>
+                    <p className="row justify-content-md-center lead">
+                      {pokemon.species.flavorText}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                <div className="card">
+                  <div className="card-body">
+                    <div className="row">
+                      <div className="col label">Type</div>
+                      <div className="col">
+                        {pokemon.types.map((type) => (
+                          <img
+                            key={type.name}
+                            className="type-icon img-fluid"
+                            src={getTypeIcon(type.name)}
+                            alt={type.name}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col label">Height</div>
+                      <div className="col">{pokemon.height}</div>
+                    </div>
+                    <div className="row">
+                      <div className="col label">Weight</div>
+                      <div className="col">{pokemon.weight}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
