@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, match } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -23,6 +23,9 @@ interface PokemonDetailsProps {
 
 type DetailProps = PokemonDetailsStateProps & PokemonDetailsProps;
 
+const scrollToRef = (ref: React.MutableRefObject<any>) =>
+  window.scrollTo(0, ref.current.offsetTop);
+
 function PokemonDetails({
   id,
   pokemon,
@@ -30,12 +33,15 @@ function PokemonDetails({
   loadPokemon,
 }: DetailProps): JSX.Element {
   const [searchText, setSearchText] = useState('');
+  const infoRef = useRef<any>(null);
 
   useEffect(() => {
     if (!pokemon) {
       loadPokemon(id);
     }
   }, []);
+
+  const scrollToInformation = () => scrollToRef(infoRef);
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = target;
@@ -71,83 +77,76 @@ function PokemonDetails({
                 <span>{`${pokemon.name} data`}</span>
               </h6>
               <ul className="nav flex-column mb-2">
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Current month
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Last quarter
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Social engagement
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Year-end sale
-                  </a>
+                <li className="nav-item" onClick={scrollToInformation}>
+                  <span data-feather="file-text"></span>
+                  Information
                 </li>
               </ul>
             </div>
           </nav>
 
           <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <div className="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-              <div className="col">
-                <div className="row justify-content-md-center ">
-                  <img
-                    className="img-fluid"
-                    src={pokemon.sprites.frontDefault}
-                    alt={pokemon.name}
-                  />
-                </div>
-                <div className="row justify-content-md-center">
-                  <div className="col">
-                    <h1 className="row justify-content-md-center h2 text-capitalize">
-                      No.{pokemon.id} {pokemon.name}
-                    </h1>
-                    <p className="row justify-content-md-center lead">
-                      {pokemon.species.flavorText}
-                    </p>
-                  </div>
-                </div>
+            <div className="jumbotron jumbotron-fluid">
+              <div className="container">
+                <img
+                  className="img-fluid"
+                  src={pokemon.sprites.frontDefault}
+                  alt={pokemon.name}
+                />
+                <h1 className="display-4">
+                  No.{pokemon.id} {pokemon.name}
+                </h1>
+                <p className="lead">{pokemon.species.genus}</p>
               </div>
+            </div>
+            <div ref={infoRef} className="row">
+              <p className="col lead">{pokemon.species.flavorText}</p>
             </div>
             <div className="row">
               <div className="col">
-                <div className="card">
-                  <div className="card-body">
-                    <div className="row">
-                      <div className="col label">Type</div>
-                      <div className="col">
+                <table className="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <th scope="row">Type</th>
+                      <td>
                         {pokemon.types.map((type) => (
                           <img
                             key={type.name}
-                            className="type-icon img-fluid"
+                            className="type-icon w-10"
                             src={getTypeIcon(type.name)}
                             alt={type.name}
                           />
                         ))}
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col label">Height</div>
-                      <div className="col">{pokemon.height}</div>
-                    </div>
-                    <div className="row">
-                      <div className="col label">Weight</div>
-                      <div className="col">{pokemon.weight}</div>
-                    </div>
-                  </div>
-                </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Height</th>
+                      <td>{pokemon.height}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Weight</th>
+                      <td>{pokemon.weight}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="col">
+                <table className="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <th scope="row">Base Experience</th>
+                      <td>{pokemon.baseExperience}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Base Happiness</th>
+                      <td>{pokemon.species.baseHappiness}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Capture Rate</th>
+                      <td>{pokemon.species.captureRate}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </main>
