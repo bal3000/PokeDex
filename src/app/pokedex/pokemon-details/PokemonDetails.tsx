@@ -9,6 +9,8 @@ import { loadPokemon } from '../../../store/pokemon/actions';
 import { Pokemon } from '../../../models/pokemon.interface';
 import SearchBox from '../../common/search/SearchBox';
 import Spinner from '../../common/spinner/Spinner';
+import EvolutionChain from './evolution-chain/EvolutionChain';
+import BasicInfo from './basic-info/BasicInfo';
 
 interface PokemonDetailsStateProps {
   pokemon?: Pokemon;
@@ -48,15 +50,11 @@ function PokemonDetails({
     setSearchText(value);
   };
 
-  const getTypeIcon = (type: string): string => {
-    return `${process.env.PUBLIC_URL}/images/icon_${type.toLowerCase()}.png`;
-  };
-
   return !pokemon || loading ? (
     <Spinner />
   ) : (
     <React.Fragment>
-      <nav className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      {/* <nav className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <Link
           to={'/pokedex'}
           className="navbar-brand col-md-3 col-lg-2 mr-0 px-3"
@@ -64,7 +62,7 @@ function PokemonDetails({
           PokeDex
         </Link>
         <SearchBox text={searchText} searchChanged={handleChange}></SearchBox>
-      </nav>
+      </nav> */}
 
       <div className="container-fluid">
         <div className="row">
@@ -86,14 +84,14 @@ function PokemonDetails({
           </nav>
 
           <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <div className="jumbotron jumbotron-fluid">
+            <div className="jumbotron jumbotron-fluid bg-white border-bottom">
               <div className="container">
                 <img
                   className="img-fluid"
                   src={pokemon.sprites.frontDefault}
                   alt={pokemon.name}
                 />
-                <h1 className="display-4">
+                <h1 className="display-4 text-capitalize">
                   No.{pokemon.id} {pokemon.name}
                 </h1>
                 <p className="lead">{pokemon.species.genus}</p>
@@ -102,53 +100,8 @@ function PokemonDetails({
             <div ref={infoRef} className="row">
               <p className="col lead">{pokemon.species.flavorText}</p>
             </div>
-            <div className="row">
-              <div className="col">
-                <table className="table table-borderless">
-                  <tbody>
-                    <tr>
-                      <th scope="row">Type</th>
-                      <td>
-                        {pokemon.types.map((type) => (
-                          <img
-                            key={type.name}
-                            className="type-icon w-10"
-                            src={getTypeIcon(type.name)}
-                            alt={type.name}
-                          />
-                        ))}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Height</th>
-                      <td>{pokemon.height}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Weight</th>
-                      <td>{pokemon.weight}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="col">
-                <table className="table table-borderless">
-                  <tbody>
-                    <tr>
-                      <th scope="row">Base Experience</th>
-                      <td>{pokemon.baseExperience}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Base Happiness</th>
-                      <td>{pokemon.species.baseHappiness}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Capture Rate</th>
-                      <td>{pokemon.species.captureRate}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <BasicInfo pokemon={pokemon} />
+            <EvolutionChain />
           </main>
         </div>
       </div>
