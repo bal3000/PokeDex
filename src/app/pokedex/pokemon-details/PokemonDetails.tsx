@@ -51,6 +51,12 @@ function PokemonDetails({
   ) : (
     <React.Fragment>
       <nav className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <Link
+          to={'/pokedex'}
+          className="navbar-brand col-md-3 col-lg-2 mr-0 px-3"
+        >
+          PokeDex
+        </Link>
         <SearchBox text={searchText} searchChanged={handleChange}></SearchBox>
       </nav>
 
