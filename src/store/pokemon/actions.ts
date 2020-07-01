@@ -4,7 +4,9 @@ import axios, { Canceler } from 'axios';
 import { GET_POKEMON, SEARCH_POKEMON } from './types';
 import { Pokemon } from '../../models/pokemon.interface';
 
-const pokemonUrl = 'http://localhost:3000/pokemon';
+const pokemonUrl = 'http://api.pokedex.com/pokemon';
+const movesUrl = 'http://api.pokedex.com/moves';
+const typesUrl = 'http://api.pokedex.com/types';
 
 let cancel: Canceler;
 
