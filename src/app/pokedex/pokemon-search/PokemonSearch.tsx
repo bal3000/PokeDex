@@ -23,9 +23,12 @@ function PokemonSearch({
 }: PokemonSearchProps): JSX.Element {
   const listItemClass = 'list-group-item list-group-item-action';
   const [searchText, setSearchText] = useState('');
+  const [noResults, setNoResults] = useState(true);
 
   useEffect(() => {
+    setNoResults(true);
     if (searchText && searchText.length >= 3) {
+      setNoResults(false);
       searchPokemon(searchText);
     }
   }, [searchText]);
@@ -37,31 +40,40 @@ function PokemonSearch({
 
   return (
     <React.Fragment>
-      <div className="row align-items-center">
-        <div className="col-md-6 offset-md-3">
+      <section className="jumbotron text-center">
+        <div className="container">
+          <h1>Pokedex</h1>
+          <p className="lead text-muted">Search for a pokemon or type</p>
           <SearchBox text={searchText} searchChanged={handleChange}></SearchBox>
         </div>
-      </div>
+      </section>
       <div className="row justify-content-md-center">
         <div className="col">
-          <div className="row align-items-end">
-            {loading ? (
-              <Spinner />
-            ) : (
-              results.map((pokemon) => (
-                <div key={pokemon.id} className="col-4">
-                  <Link className={listItemClass} to={`/pokedex/${pokemon.id}`}>
-                    <img
-                      className="img-fluid"
-                      src={pokemon.sprites.frontDefault}
-                      alt={pokemon.name}
-                    />
-                    No. {pokemon.id} {pokemon.name}
-                  </Link>
-                </div>
-              ))
-            )}
-          </div>
+          {noResults ? (
+            'No results'
+          ) : (
+            <div className="row align-items-end">
+              {loading ? (
+                <Spinner />
+              ) : (
+                results.map((pokemon) => (
+                  <div key={pokemon.id} className="col-4">
+                    <Link
+                      className={listItemClass}
+                      to={`/pokedex/${pokemon.id}`}
+                    >
+                      <img
+                        className="img-fluid"
+                        src={pokemon.sprites.frontDefault}
+                        alt={pokemon.name}
+                      />
+                      No. {pokemon.id} {pokemon.name}
+                    </Link>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </div>
     </React.Fragment>
