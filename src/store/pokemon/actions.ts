@@ -4,10 +4,7 @@ import axios, { Canceler } from 'axios';
 import { GET_POKEMON, SEARCH_POKEMON } from './types';
 import { Pokemon } from '../../models/pokemon.interface';
 
-const pokemonUrl = 'http://api.pokedex.com/pokemon';
-const movesUrl = 'http://api.pokedex.com/moves';
-const typesUrl = 'http://api.pokedex.com/types';
-
+const pokemonUrl = 'http://localhost:3000';
 let cancel: Canceler;
 
 export const searchPokemonPending = createAction<Pokemon[]>(
@@ -33,7 +30,7 @@ export const searchPokemon = createAsyncThunk<Pokemon[], string>(
       cancel();
     }
     const response = await axios.get<Pokemon[]>(
-      `${pokemonUrl}?searchText=${searchText}`,
+      `${pokemonUrl}/pokemon?searchText=${searchText}`,
       {
         cancelToken: new axios.CancelToken((c: Canceler) => (cancel = c)),
       }
@@ -45,7 +42,9 @@ export const searchPokemon = createAsyncThunk<Pokemon[], string>(
 export const loadPokemon = createAsyncThunk<Pokemon, string>(
   GET_POKEMON,
   async (pokeNumber) => {
-    const response = await axios.get<Pokemon>(`${pokemonUrl}/${pokeNumber}`);
+    const response = await axios.get<Pokemon>(
+      `${pokemonUrl}/pokemon/${pokeNumber}`
+    );
     return response.data;
   }
 );

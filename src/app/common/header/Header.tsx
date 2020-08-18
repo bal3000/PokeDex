@@ -19,11 +19,6 @@ const Header = () => {
       <div className="collapse navbar-collapse" id="navbarsExample04">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
-            <NavLink to="/" exact className="nav-link" activeClassName="active">
-              Home
-            </NavLink>
-          </li>
-          <li className="nav-item">
             <NavLink
               to="/pokedex"
               className="nav-link"

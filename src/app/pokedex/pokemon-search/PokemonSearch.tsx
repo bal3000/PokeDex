@@ -37,16 +37,13 @@ function PokemonSearch({
 
   return (
     <React.Fragment>
+      <div className="row align-items-center">
+        <div className="col-md-6 offset-md-3">
+          <SearchBox text={searchText} searchChanged={handleChange}></SearchBox>
+        </div>
+      </div>
       <div className="row justify-content-md-center">
         <div className="col">
-          <div className="row align-items-start">
-            <div className="col">
-              <SearchBox
-                text={searchText}
-                searchChanged={handleChange}
-              ></SearchBox>
-            </div>
-          </div>
           <div className="row align-items-end">
             {loading ? (
               <Spinner />
