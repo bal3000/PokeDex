@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './PokemonSearch.scss';
@@ -9,6 +8,7 @@ import { searchPokemon } from '../../../store/pokemon/actions';
 import { Pokemon } from '../../../models/pokemon.interface';
 import Spinner from '../../common/spinner/Spinner';
 import SearchBox from '../../common/search/SearchBox';
+import PokemonCard from './pokemon-card/PokemonCard';
 
 interface PokemonSearchProps {
   results: Pokemon[];
@@ -21,16 +21,16 @@ function PokemonSearch({
   loading,
   searchPokemon,
 }: PokemonSearchProps): JSX.Element {
-  const listItemClass = 'list-group-item list-group-item-action';
   const [searchText, setSearchText] = useState('');
   const [noResults, setNoResults] = useState(true);
 
   useEffect(() => {
-    setNoResults(true);
+    setNoResults(results.length === 0);
     if (searchText && searchText.length >= 3) {
       setNoResults(false);
       searchPokemon(searchText);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,33 +47,19 @@ function PokemonSearch({
           <SearchBox text={searchText} searchChanged={handleChange}></SearchBox>
         </div>
       </section>
-      <div className="row justify-content-md-center">
-        <div className="col">
-          {noResults ? (
-            'No results'
-          ) : (
-            <div className="row align-items-end">
-              {loading ? (
-                <Spinner />
-              ) : (
-                results.map((pokemon) => (
-                  <div key={pokemon.id} className="col-4">
-                    <Link
-                      className={listItemClass}
-                      to={`/pokedex/${pokemon.id}`}
-                    >
-                      <img
-                        className="img-fluid"
-                        src={pokemon.sprites.frontDefault}
-                        alt={pokemon.name}
-                      />
-                      No. {pokemon.id} {pokemon.name}
-                    </Link>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
+      <div className="py-5 bg-light">
+        <div className="container">
+          <div className="row">
+            {noResults ? (
+              <p className="lead text-muted">No results</p>
+            ) : loading ? (
+              <Spinner />
+            ) : (
+              results.map((pokemon) => (
+                <PokemonCard key={pokemon.id} pokemon={pokemon} />
+              ))
+            )}
+          </div>
         </div>
       </div>
     </React.Fragment>

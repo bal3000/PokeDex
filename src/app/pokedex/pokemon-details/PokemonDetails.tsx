@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Link, match } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { match } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './PokemonDetails.scss';
@@ -7,7 +7,6 @@ import './PokemonDetails.scss';
 import { AppState } from '../../../store';
 import { loadPokemon } from '../../../store/pokemon/actions';
 import { Pokemon } from '../../../models/pokemon.interface';
-import SearchBox from '../../common/search/SearchBox';
 import Spinner from '../../common/spinner/Spinner';
 import EvolutionChain from './evolution-chain/EvolutionChain';
 import BasicInfo from './basic-info/BasicInfo';
@@ -34,21 +33,16 @@ function PokemonDetails({
   loading,
   loadPokemon,
 }: DetailProps): JSX.Element {
-  const [searchText, setSearchText] = useState('');
   const infoRef = useRef<any>(null);
 
   useEffect(() => {
     if (!pokemon) {
       loadPokemon(id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scrollToInformation = () => scrollToRef(infoRef);
-
-  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = target;
-    setSearchText(value);
-  };
 
   return !pokemon || loading ? (
     <Spinner />
