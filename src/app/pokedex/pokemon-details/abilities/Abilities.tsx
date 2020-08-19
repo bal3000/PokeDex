@@ -8,7 +8,7 @@ interface AbilitiesProps {
   abilities: Ability[];
 }
 
-function Abilities({ abilities }: AbilitiesProps): JSX.Element {
+const Abilities = ({ abilities }: AbilitiesProps): JSX.Element => {
   return (
     <div className="row border-top">
       <div className="col">
@@ -23,6 +23,6 @@ function Abilities({ abilities }: AbilitiesProps): JSX.Element {
       </div>
     </div>
   );
-}
+};
 
 export default Abilities;

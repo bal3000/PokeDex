@@ -11,6 +11,7 @@ import Spinner from '../../common/spinner/Spinner';
 import EvolutionChain from './evolution-chain/EvolutionChain';
 import BasicInfo from './basic-info/BasicInfo';
 import Abilities from './abilities/Abilities';
+import StrongAgainst from './strong-against/StrongAgainst';
 
 interface PokemonDetailsStateProps {
   pokemon?: Pokemon;
@@ -72,6 +73,9 @@ function PokemonDetails({
               <BasicInfo pokemon={pokemon} />
               <Abilities abilities={pokemon.abilities} />
               <EvolutionChain />
+              <StrongAgainst types={pokemon.types} />
+              {/* WeakAgainst */}
+              {/* Moves */}
             </main>
           </div>
         </div>
