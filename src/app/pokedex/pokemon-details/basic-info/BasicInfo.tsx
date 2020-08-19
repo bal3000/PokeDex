@@ -21,7 +21,7 @@ function BasicInfo({ pokemon }: BasicInfoProps) {
               <th scope="row">Type</th>
               <td>
                 {pokemon.types.map((type) => (
-                  <div key={type.id} className="pokemon-type shadow p-2">
+                  <div key={type.id} className="pokemon-type shadow p-1">
                     <img
                       className="type-icon"
                       src={getTypeIcon(type.name)}
