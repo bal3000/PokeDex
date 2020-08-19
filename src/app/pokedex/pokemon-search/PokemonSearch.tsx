@@ -11,12 +11,14 @@ import SearchBox from '../../common/search/SearchBox';
 import PokemonCard from './pokemon-card/PokemonCard';
 
 interface PokemonSearchProps {
+  prevSearchText: string;
   results: Pokemon[];
   loading: boolean;
   searchPokemon: any;
 }
 
 function PokemonSearch({
+  prevSearchText,
   results,
   loading,
   searchPokemon,
@@ -25,10 +27,18 @@ function PokemonSearch({
   const [noResults, setNoResults] = useState(true);
 
   useEffect(() => {
-    setNoResults(results.length === 0);
+    if (prevSearchText.length) {
+      setSearchText(prevSearchText);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (searchText && searchText.length >= 3) {
       setNoResults(false);
       searchPokemon(searchText);
+    } else {
+      setNoResults(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
@@ -68,6 +78,7 @@ function PokemonSearch({
 
 const mapStateToProps = (state: AppState) => {
   return {
+    prevSearchText: state.searchText,
     results: state.pokemon,
     loading: state.loading,
   };

@@ -7,6 +7,7 @@ import {
 } from './actions';
 
 const initialState: PokemonState = {
+  searchText: '',
   pokemon: [],
   selectedPokemon: undefined,
   loading: false,
@@ -21,7 +22,8 @@ export const pokemonReducer = createReducer(initialState, {
     state.loading = true;
   },
   [searchPokemonSuccess.type]: (state, action) => {
-    state.pokemon = action.payload;
+    state.searchText = action.payload.searchText;
+    state.pokemon = action.payload.pokemon;
     state.loading = false;
   },
   [loadPokemonSuccess.type]: (state, action) => {

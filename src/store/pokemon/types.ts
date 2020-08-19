@@ -1,6 +1,7 @@
 import { Pokemon } from '../../models/pokemon.interface';
 
 export interface PokemonState {
+  searchText: string;
   pokemon: Pokemon[];
   selectedPokemon?: Pokemon;
   loading: boolean;
