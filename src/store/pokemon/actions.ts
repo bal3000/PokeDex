@@ -3,8 +3,9 @@ import axios, { Canceler } from 'axios';
 
 import { GET_POKEMON, SEARCH_POKEMON } from './types';
 import { Pokemon } from '../../models/pokemon.interface';
+import { POKEAPI_URI } from '../../app/common/constants';
 
-const pokemonUrl = 'http://localhost:3000';
+const pokemonUrl = POKEAPI_URI;
 let cancel: Canceler;
 
 export const searchPokemonPending = createAction<Pokemon[]>(
