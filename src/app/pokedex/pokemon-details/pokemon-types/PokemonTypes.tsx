@@ -30,16 +30,17 @@ function PokemonTypes({ types }: PokemonTypesProps): JSX.Element {
       }
     });
 
-    doubleDamage = doubleDamage.filter(
-      (dmg) => !fourTimesDamage.some((f) => f.id === dmg.id)
-    );
+    // 4x damage does not work like this, comment out for now
+
+    // doubleDamage = doubleDamage.filter(
+    //   (dmg) => !fourTimesDamage.some((f) => f.id === dmg.id)
+    // );
 
     return (
       <div>
-        <h3>Double Damage To:</h3>
         {doubleDamage.map((dmg) => generateTypeImg(dmg))}
-        <h3>Four Times Damage To:</h3>
-        {fourTimesDamage.map((dmg) => generateTypeImg(dmg))}
+        {/* <h3>Four Times Damage To:</h3>
+        {fourTimesDamage.map((dmg) => generateTypeImg(dmg))} */}
       </div>
     );
   };

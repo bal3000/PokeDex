@@ -75,7 +75,7 @@ function PokemonDetails(props: DetailProps): JSX.Element {
               <BasicInfo pokemon={props.pokemon} />
               <Abilities abilities={props.pokemon.abilities} />
               <EvolutionChain />
-              {props.types.length > 0 || (
+              {props.types.length === 0 || (
                 <PokemonTypes types={getTypeDetails()} />
               )}
               {/* WeakAgainst */}
@@ -103,4 +103,6 @@ const mapStateToProps = (state: AppState, ownProps: PokemonDetailsProps) => {
   };
 };
 
-export default connect(mapStateToProps, { loadPokemon })(PokemonDetails);
+export default connect(mapStateToProps, { loadPokemon, getTypes })(
+  PokemonDetails
+);
