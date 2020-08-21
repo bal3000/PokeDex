@@ -4,6 +4,7 @@ import {
   loadPokemonSuccess,
   searchPokemonPending,
   searchPokemonSuccess,
+  getTypesSuccess,
 } from './actions';
 
 const initialState: PokemonState = {
@@ -11,11 +12,12 @@ const initialState: PokemonState = {
   pokemon: [],
   selectedPokemon: undefined,
   loading: false,
+  types: [],
 };
 
-const actionTypeEndsInPending = (type: string): boolean => {
-  return type.substring(type.length - 8) === '/pending';
-};
+// const actionTypeEndsInPending = (type: string): boolean => {
+//   return type.substring(type.length - 8) === '/pending';
+// };
 
 export const pokemonReducer = createReducer(initialState, {
   [searchPokemonPending.type]: (state) => {
@@ -29,5 +31,8 @@ export const pokemonReducer = createReducer(initialState, {
   [loadPokemonSuccess.type]: (state, action) => {
     state.selectedPokemon = action.payload;
     state.loading = false;
+  },
+  [getTypesSuccess.type]: (state, action) => {
+    state.types = action.payload;
   },
 });
