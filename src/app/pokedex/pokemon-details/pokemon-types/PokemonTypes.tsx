@@ -14,8 +14,8 @@ function PokemonTypes({ types }: PokemonTypesProps): JSX.Element {
     return `${process.env.PUBLIC_URL}/images/icon_${type.toLowerCase()}.png`;
   };
 
-  const strongAgainst = (): JSX.Element => {
-    let doubleDamage = types.flatMap(
+  const attackStrongAgainst = (): JSX.Element => {
+    const doubleDamage = types.flatMap(
       (type) => type.damageRelations.doubleDamageTo
     );
     const fourTimesDamage: LinkingResource[] = [];
@@ -37,11 +37,33 @@ function PokemonTypes({ types }: PokemonTypesProps): JSX.Element {
     // );
 
     return (
-      <div>
-        {doubleDamage.map((dmg) => generateTypeImg(dmg))}
+      <React.Fragment>
+        <h4>Super-effective against</h4>
+        {doubleDamage
+          .filter(
+            (value, index, self) =>
+              self.findIndex((f) => f.id === value.id) === index
+          )
+          .map((dmg) => generateTypeImg(dmg))}
         {/* <h3>Four Times Damage To:</h3>
         {fourTimesDamage.map((dmg) => generateTypeImg(dmg))} */}
-      </div>
+      </React.Fragment>
+    );
+  };
+
+  const attackWeakAgainst = (): JSX.Element => {
+    let halfDamage = types.flatMap((type) => type.damageRelations.halfDamageTo);
+
+    return (
+      <React.Fragment>
+        <h4>Not very effective against</h4>
+        {halfDamage
+          .filter(
+            (value, index, self) =>
+              self.findIndex((f) => f.id === value.id) === index
+          )
+          .map((dmg) => generateTypeImg(dmg))}
+      </React.Fragment>
     );
   };
 
@@ -59,9 +81,18 @@ function PokemonTypes({ types }: PokemonTypesProps): JSX.Element {
   };
 
   return (
-    <div>
-      <h3>Strong against</h3>
-      {strongAgainst()}
+    <div className="row">
+      <div className="col">
+        <h3>Attack</h3>
+        <div className="row">
+          <div className="col">{attackStrongAgainst()}</div>
+          <div className="col">{attackWeakAgainst()}</div>
+        </div>
+        <h3>Defense</h3>
+        <div className="row">
+          <div className="col"></div>
+        </div>
+      </div>
     </div>
   );
 }
