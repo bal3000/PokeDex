@@ -78,7 +78,6 @@ function PokemonDetails(props: DetailProps): JSX.Element {
               {props.types.length === 0 || (
                 <PokemonTypes types={getTypeDetails()} />
               )}
-              {/* WeakAgainst */}
               {/* Moves */}
             </main>
           </div>
