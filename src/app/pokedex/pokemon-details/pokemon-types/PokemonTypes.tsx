@@ -14,9 +14,33 @@ function PokemonTypes({ types }: PokemonTypesProps): JSX.Element {
     return `${process.env.PUBLIC_URL}/images/icon_${type.toLowerCase()}.png`;
   };
 
-  const attackStrongAgainst = (): JSX.Element => {
+  const attackStrongAgainst = (): React.ReactNode => {
     const doubleDamage = types.flatMap(
       (type) => type.damageRelations.doubleDamageTo
+    );
+
+    return (
+      <React.Fragment>
+        <h4>Super-effective against</h4>
+        {createIcons(doubleDamage)}
+      </React.Fragment>
+    );
+  };
+
+  const attackWeakAgainst = (): React.ReactNode => {
+    let halfDamage = types.flatMap((type) => type.damageRelations.halfDamageTo);
+
+    return (
+      <React.Fragment>
+        <h4>Not very effective against</h4>
+        {createIcons(halfDamage)}
+      </React.Fragment>
+    );
+  };
+
+  const defendWeakAgainst = (): React.ReactNode => {
+    let doubleDamage = types.flatMap(
+      (type) => type.damageRelations.doubleDamageFrom
     );
     const fourTimesDamage: LinkingResource[] = [];
     doubleDamage.forEach((dmg) => {
@@ -30,41 +54,65 @@ function PokemonTypes({ types }: PokemonTypesProps): JSX.Element {
       }
     });
 
-    // 4x damage does not work like this, comment out for now
-
-    // doubleDamage = doubleDamage.filter(
-    //   (dmg) => !fourTimesDamage.some((f) => f.id === dmg.id)
-    // );
+    doubleDamage = doubleDamage.filter(
+      (dmg) => !fourTimesDamage.some((f) => f.id === dmg.id)
+    );
 
     return (
       <React.Fragment>
-        <h4>Super-effective against</h4>
-        {doubleDamage
-          .filter(
-            (value, index, self) =>
-              self.findIndex((f) => f.id === value.id) === index
-          )
-          .map((dmg) => generateTypeImg(dmg))}
-        {/* <h3>Four Times Damage To:</h3>
-        {fourTimesDamage.map((dmg) => generateTypeImg(dmg))} */}
+        <h4>Weak against</h4>
+        {createIcons(doubleDamage)}
+        {fourTimesDamage.length > 0 || (
+          <div>
+            <h3>Four Times Damage From:</h3>
+            {fourTimesDamage.map((dmg) => generateTypeImg(dmg))}
+          </div>
+        )}
       </React.Fragment>
     );
   };
 
-  const attackWeakAgainst = (): JSX.Element => {
-    let halfDamage = types.flatMap((type) => type.damageRelations.halfDamageTo);
+  const defendStrongAgainst = (): React.ReactNode => {
+    let halfDamage = types.flatMap(
+      (type) => type.damageRelations.halfDamageFrom
+    );
+    const fourTimesDamage: LinkingResource[] = [];
+    halfDamage.forEach((dmg) => {
+      if (!fourTimesDamage.some((fdmg) => fdmg.id === dmg.id)) {
+        const dmgCount = halfDamage.filter(
+          (compareDmg) => compareDmg.id === dmg.id
+        ).length;
+        if (dmgCount > 1) {
+          fourTimesDamage.push(dmg);
+        }
+      }
+    });
+
+    halfDamage = halfDamage.filter(
+      (dmg) => !fourTimesDamage.some((f) => f.id === dmg.id)
+    );
 
     return (
       <React.Fragment>
-        <h4>Not very effective against</h4>
-        {halfDamage
-          .filter(
-            (value, index, self) =>
-              self.findIndex((f) => f.id === value.id) === index
-          )
-          .map((dmg) => generateTypeImg(dmg))}
+        <h4>Strong against</h4>
+        {createIcons(halfDamage)}
+        {fourTimesDamage.length > 0 || (
+          <div>
+            <h3>1/4 Damage From:</h3>
+            {fourTimesDamage.map((dmg) => generateTypeImg(dmg))}
+          </div>
+        )}
       </React.Fragment>
     );
+  };
+
+  const createIcons = (damage: LinkingResource[]): React.ReactNode => {
+    return damage
+      .filter(
+        (value, index, self) =>
+          self.findIndex((f) => f.id === value.id) === index
+      )
+      .map((dmg) => generateTypeImg(dmg));
   };
 
   const generateTypeImg = (type: LinkingResource): JSX.Element => {
@@ -90,7 +138,8 @@ function PokemonTypes({ types }: PokemonTypesProps): JSX.Element {
         </div>
         <h3>Defense</h3>
         <div className="row">
-          <div className="col"></div>
+          <div className="col">{defendWeakAgainst()}</div>
+          <div className="col">{defendStrongAgainst()}</div>
         </div>
       </div>
     </div>
